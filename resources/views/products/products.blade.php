@@ -78,10 +78,14 @@
             <div class="card mg-b-20">
                 <div class="card-header pb-0">
                     <div class="d-flex justify-content-between">
-                        @can('اضافة منتج')
-                            <a class="modal-effect btn btn-outline-primary btn-block" data-effect="effect-scale"
-                                data-toggle="modal" href="#exampleModal">اضافة منتج</a>
-                        @endcan
+                       <div class="row">
+                           <div class="col-12">
+                               <a class="modal-effect btn btn-outline-primary btn-block" data-effect="effect-scale"
+                                  data-toggle="modal" href="#exampleModal">اضافة منتج</a>
+                           </div>
+                       </div>
+
+
                     </div>
                 </div>
                 <div class="card-body">
@@ -90,9 +94,9 @@
                             <thead>
                                 <tr>
                                     <th class="border-bottom-0">#</th>
-                                    <th class="border-bottom-0">اسم المنتج</th>
-                                    <th class="border-bottom-0">اسم القسم</th>
-                                    <th class="border-bottom-0">ملاحظات</th>
+                                    <th class="border-bottom-0">اسم المنتج انجليزي</th>
+                                    <th class="border-bottom-0"> اسم القسم عربي</th>
+                                    <th class="border-bottom-0">السعر</th>
                                     <th class="border-bottom-0">العمليات</th>
 
                                 </tr>
@@ -101,27 +105,39 @@
                                 <?php $i = 0; ?>
                                 @foreach ($products as $Product)
                                     <?php $i++; ?>
+
+
                                     <tr>
                                         <td>{{ $i }}</td>
-                                        <td>{{ $Product->Product_name }}</td>
-                                        <td>{{ $Product->section->section_name }}</td>
-                                        <td>{{ $Product->description }}</td>
+                                        <!-- Show the product name in English -->
+                                        <td>{{ $Product->getTranslation('name', 'en') }}</td>
+
+                                        <!-- Show the product name in Arabic -->
+                                        <td>{{ $Product->getTranslation('name', 'ar') }}</td>
+
+                                        <!-- Show the product description -->
+                                        <td>{{ $Product->price }}</td>
+
                                         <td>
-                                            @can('تعديل منتج')
-                                                <button class="btn btn-outline-success btn-sm"
-                                                    data-name="{{ $Product->Product_name }}" data-pro_id="{{ $Product->id }}"
-                                                    data-section_name="{{ $Product->section->section_name }}"
-                                                    data-description="{{ $Product->description }}" data-toggle="modal"
-                                                    data-target="#edit_Product">تعديل</button>
-                                            @endcan
 
-                                            @can('حذف منتج')
-                                                <button class="btn btn-outline-danger btn-sm " data-pro_id="{{ $Product->id }}"
-                                                    data-product_name="{{ $Product->Product_name }}" data-toggle="modal"
-                                                    data-target="#modaldemo9">حذف</button>
-                                            @endcan
+                                            <div class="dropdown">
+                                                <button aria-expanded="false" aria-haspopup="true"
+                                                        class="btn ripple btn-primary btn-sm" data-toggle="dropdown"
+                                                        type="button">العمليات<i class="fas fa-caret-down ml-1"></i></button>
+                                                <div class="dropdown-menu tx-13">
+                                            <!-- Edit Product -->
+                                            <a class="dropdown-item" href="{{ route('products.edit', $Product->id) }}">تعديل المنتج</a>
 
+                                                    <!-- Delete Product Button -->
+                                                    <form action="{{ route('products.destroy', $Product->id) }}" method="POST" style="display:inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="dropdown-item" onclick="return confirm('هل أنت متأكد من أنك تريد حذف هذا المنتج؟')">
+                                                            <i class="text-danger fas fa-trash-alt"></i>&nbsp;&nbsp;حذف المنتج
+                                                        </button>
+                                                    </form>
                                         </td>
+
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -146,25 +162,18 @@
                         {{ csrf_field() }}
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="exampleInputEmail1">اسم المنتج</label>
-                                <input type="text" class="form-control" id="Product_name" name="Product_name" required>
+                                <label for="Product_name_ar">اسم المنتج (ar)</label>
+                                <input type="text" class="form-control" id="Product_name_ar" name="name[ar]" value="{{ old('name.ar', $product->name['ar'] ?? '') }}" required>
                             </div>
-
-                            <label class="my-1 mr-2" for="inlineFormCustomSelectPref">القسم</label>
-                            <select name="section_id" id="section_id" class="form-control" required>
-                                <option value="" selected disabled> --حدد القسم--</option>
-                                @foreach ($sections as $section)
-                                    <option value="{{ $section->id }}">{{ $section->section_name }}</option>
-                                @endforeach
-                            </select>
-
                             <div class="form-group">
-                                <label for="exampleFormControlTextarea1">ملاحظات</label>
-                                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                                <label for="Product_name_en">اسم المنتج (en)</label>
+                                <input type="text" class="form-control" id="Product_name_en" name="name[en]" value="{{ old('name.en', $product->name['en'] ?? '') }}" required>
                             </div>
-
-                        </div>
-                        <div class="modal-footer">
+                            <div class="form-group">
+                                <label for="Product_price">Price</label>
+                                <input type="text" class="form-control" id="Product_price" name="price" value="{{ old('price', $product->price ?? '') }}" required>
+                            </div>
+                            <div class="modal-footer">
                             <button type="submit" class="btn btn-success">تاكيد</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
                         </div>
@@ -197,12 +206,7 @@
                                 <input type="text" class="form-control" name="Product_name" id="Product_name">
                             </div>
 
-                            <label class="my-1 mr-2" for="inlineFormCustomSelectPref">القسم</label>
-                            <select name="section_name" id="section_name" class="custom-select my-1 mr-sm-2" required>
-                                @foreach ($sections as $section)
-                                    <option>{{ $section->section_name }}</option>
-                                @endforeach
-                            </select>
+
 
                             <div class="form-group">
                                 <label for="des">ملاحظات :</label>
@@ -220,33 +224,6 @@
             </div>
         </div>
 
-        <!-- delete -->
-        <div class="modal fade" id="modaldemo9" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">حذف المنتج</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form action="products/destroy" method="post">
-                        {{ method_field('delete') }}
-                        {{ csrf_field() }}
-                        <div class="modal-body">
-                            <p>هل انت متاكد من عملية الحذف ؟</p><br>
-                            <input type="hidden" name="pro_id" id="pro_id" value="">
-                            <input class="form-control" name="product_name" id="product_name" type="text" readonly>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
-                            <button type="submit" class="btn btn-danger">تاكيد</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
 
 
     </div>

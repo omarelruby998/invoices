@@ -1,15 +1,12 @@
 @extends('layouts.master')
 @section('title')
-    لوحة التحكم - برنامج الفواتير
+    لوحة التحكم - برنامج تجريبي
 @stop
 @section('css')
-    <!--  Owl-carousel css-->
     <link href="{{ URL::asset('assets/plugins/owl-carousel/owl.carousel.css') }}" rel="stylesheet" />
-    <!-- Maps css -->
     <link href="{{ URL::asset('assets/plugins/jqvmap/jqvmap.min.css') }}" rel="stylesheet">
 @endsection
 @section('page-header')
-    <!-- breadcrumb -->
     <div class="breadcrumb-header justify-content-between">
         <div class="left-content">
             <div>
@@ -45,17 +42,10 @@
             <div class="card overflow-hidden sales-card bg-primary-gradient">
                 <div class="pl-3 pt-3 pr-3 pb-2 pt-0">
                     <div class="">
-                        <h6 class="mb-3 tx-12 text-white">اجمالي الفواتير</h6>
+                        <h6 class="mb-3 tx-12 text-white">اجمالي تجريبي</h6>
                     </div>
                     <div class="pb-0 mt-0">
                         <div class="d-flex">
-                            <div class="">
-                                <h4 class="tx-20 font-weight-bold mb-1 text-white">
-
-                                    {{ number_format(\App\invoices::sum('Total'), 2) }}
-                                </h4>
-                                <p class="mb-0 tx-12 text-white op-7">{{ \App\invoices::count() }}</p>
-                            </div>
                             <span class="float-right my-auto mr-auto">
                                 <i class="fas fa-arrow-circle-up text-white"></i>
                                 <span class="text-white op-7">100%</span>
@@ -70,34 +60,22 @@
             <div class="card overflow-hidden sales-card bg-danger-gradient">
                 <div class="pl-3 pt-3 pr-3 pb-2 pt-0">
                     <div class="">
-                        <h6 class="mb-3 tx-12 text-white">الفواتير الغير مدفوعة</h6>
+                        <h6 class="mb-3 tx-12 text-white">تجريبي الغير مدفوعة</h6>
                     </div>
                     <div class="pb-0 mt-0">
                         <div class="d-flex">
                             <div class="">
                                 <h3 class="tx-20 font-weight-bold mb-1 text-white">
 
-                                    {{ number_format(\App\invoices::where('Value_Status', 2)->sum('Total'), 2) }}
 
                                 </h3>
-                                <p class="mb-0 tx-12 text-white op-7">{{ \App\invoices::where('Value_Status', 2)->count() }}
-                                </p>
+
                             </div>
                             <span class="float-right my-auto mr-auto">
                                 <i class="fas fa-arrow-circle-down text-white"></i>
                                 <span class="text-white op-7">
 
-                                    @php
-                                    $count_all= \App\invoices::count();
-                                    $count_invoices2 = \App\invoices::where('Value_Status', 2)->count();
 
-                                    if($count_invoices2 == 0){
-                                       echo $count_invoices2 = 0;
-                                    }
-                                    else{
-                                       echo $count_invoices2 = $count_invoices2 / $count_all *100;
-                                    }
-                                    @endphp
 
                                 </span>
                             </span>
@@ -111,34 +89,17 @@
             <div class="card overflow-hidden sales-card bg-success-gradient">
                 <div class="pl-3 pt-3 pr-3 pb-2 pt-0">
                     <div class="">
-                        <h6 class="mb-3 tx-12 text-white">الفواتير المدفوعة</h6>
+                        <h6 class="mb-3 tx-12 text-white">تجريبي المدفوعة</h6>
                     </div>
                     <div class="pb-0 mt-0">
                         <div class="d-flex">
                             <div class="">
-                                <h4 class="tx-20 font-weight-bold mb-1 text-white">
 
-                                    {{ number_format(\App\invoices::where('Value_Status', 1)->sum('Total'), 2) }}
-
-                                </h4>
-                                <p class="mb-0 tx-12 text-white op-7">
-                                    {{ \App\invoices::where('Value_Status', 1)->count() }}
-                                </p>
                             </div>
                             <span class="float-right my-auto mr-auto">
                                 <i class="fas fa-arrow-circle-up text-white"></i>
                                 <span class="text-white op-7">
-                                    @php
-                                        $count_all= \App\invoices::count();
-                                        $count_invoices1 = \App\invoices::where('Value_Status', 1)->count();
 
-                                        if($count_invoices1 == 0){
-                                           echo $count_invoices1 = 0;
-                                        }
-                                        else{
-                                           echo $count_invoices1 = $count_invoices1 / $count_all *100;
-                                        }
-                                    @endphp
                                 </span>
                             </span>
                         </div>
@@ -151,35 +112,18 @@
             <div class="card overflow-hidden sales-card bg-warning-gradient">
                 <div class="pl-3 pt-3 pr-3 pb-2 pt-0">
                     <div class="">
-                        <h6 class="mb-3 tx-12 text-white">الفواتير المدفوعة جزئيا</h6>
+                        <h6 class="mb-3 tx-12 text-white">تجريبي المدفوعة جزئيا</h6>
                     </div>
                     <div class="pb-0 mt-0">
                         <div class="d-flex">
                             <div class="">
                                 <h4 class="tx-20 font-weight-bold mb-1 text-white">
 
-                                    {{ number_format(\App\invoices::where('Value_Status', 3)->sum('Total'), 2) }}
 
-                                </h4>
-                                <p class="mb-0 tx-12 text-white op-7">
-                                    {{ \App\invoices::where('Value_Status', 3)->count() }}
-                                </p>
                             </div>
                             <span class="float-right my-auto mr-auto">
                                 <i class="fas fa-arrow-circle-down text-white"></i>
-                                <span class="text-white op-7">
-                                    @php
-                                        $count_all= \App\invoices::count();
-                                        $count_invoices1 = \App\invoices::where('Value_Status', 1)->count();
 
-                                        if($count_invoices1 == 0){
-                                            echo $count_invoices1 = 0;
-                                        }
-                                        else{
-                                          echo $count_invoices1 = $count_invoices1 / $count_all *100;
-                                        }
-                                    @endphp
-                                </span>
                             </span>
                         </div>
                     </div>
@@ -193,30 +137,11 @@
     <!-- row opened -->
     <div class="row row-sm">
         <div class="col-md-12 col-lg-12 col-xl-7">
-            <div class="card">
-                <div class="card-header bg-transparent pd-b-0 pd-t-20 bd-b-0">
-                    <div class="d-flex justify-content-between">
-                        <h4 class="card-title mb-0">نسبة احصائية الفواتير</h4>
-                        <i class="mdi mdi-dots-horizontal text-gray"></i>
-                    </div>
 
-                </div>
-                <div class="card-body" style="width: 70%">
-                    {!! $chartjs->render() !!}
-
-                </div>
-            </div>
         </div>
 
 
-        <div class="col-lg-12 col-xl-5">
-            <div class="card card-dashboard-map-one">
-                <label class="main-content-label">نسبة احصائية الفواتير</label>
-                <div class="" style="width: 100%">
-                    {!! $chartjs_2->render() !!}
-                </div>
-            </div>
-        </div>
+
     </div>
     <!-- row closed -->
     </div>

@@ -163,21 +163,7 @@
 											<h6 class="dropdown-title mb-1 tx-15 text-white font-weight-semibold">الاشعارات</h6>
 											<span class="badge badge-pill badge-warning mr-auto my-auto float-left"><a href="#">تعين قراءة الكل</a></span>
 										</div>
-                                        <p class="dropdown-title-text subtext mb-0 text-white op-6 pb-0 tx-12 "><h6 style="color: yellow">{{ auth()->user()->unreadNotifications->count() }}</h6></p>
-									</div>
-                                    @foreach(auth()->user()->unreadNotifications as $notification)
-									<div class="main-notification-list Notification-scroll">
-										<a class="d-flex p-3 border-bottom" href="#">
-											<div class="notifyimg bg-pink">
-												<i class="la la-file-alt text-white"></i>
-											</div>
-											<div class="mr-3">
-                                                    <h5 class="notification-label mb-1">{{ $notification->data['title'] }} {{ $notification->data['user'] }} </h5>
-												<div class="notification-subtext">{{ $notification->created_at }}</div>
-											</div>
-										</a>
-									</div>
-                                    @endforeach
+ 									</div>
 
 								</div>
 							</div>

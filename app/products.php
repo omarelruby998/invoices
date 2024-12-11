@@ -3,15 +3,18 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Translatable\HasTranslations;
 
 class products extends Model
 {
 
-    protected $guarded = [];
+    use HasTranslations;
 
-   public function section()
-   {
-   return $this->belongsTo('App\sections');
-   }
+    public $translatable = ['name'];
+
+    public function user_wishlists()
+    {
+        return $this->hasMany();
+    }
 
 }
